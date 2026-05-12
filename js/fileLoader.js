@@ -25,3 +25,4 @@ function loadFile(file, callback) {
     reader.readAsBinaryString(file);
   }
 }
+``
