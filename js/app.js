@@ -1,39 +1,37 @@
 let rows = [];
 
 const fileInput = document.getElementById("fileInput");
-const mappingSection = document.getElementById("mappingSection");
+const productIdSection = document.getElementById("productIdSection");
+const productIdColumn = document.getElementById("productIdColumn");
+const processBtn = document.getElementById("processBtn");
+const statusText = document.getElementById("statusText");
 
 fileInput.addEventListener("change", e => {
+  statusText.textContent = "Loading file...";
   loadFile(e.target.files[0], (data, columns) => {
     rows = data;
-    populateSelectors(columns);
-    mappingSection.classList.remove("hidden");
+    populateProductId(columns);
+    productIdSection.classList.remove("hidden");
+    statusText.textContent = "File loaded. Select product identifier.";
   });
 });
 
-function populateSelectors(columns) {
-  ["productIdColumn", "urlColumn", "widthColumn", "heightColumn", "titleColumn"]
-    .forEach(id => {
-      const select = document.getElementById(id);
-      select.innerHTML = "<option value=''>-- Select --</option>";
-      columns.forEach(c => {
-        const o = document.createElement("option");
-        o.value = c;
-        o.textContent = c;
-        select.appendChild(o);
-      });
-    });
+function populateProductId(columns) {
+  productIdColumn.innerHTML = "<option value=''>-- Select --</option>";
+  columns.forEach(c => {
+    const o = document.createElement("option");
+    o.value = c;
+    o.textContent = c;
+    productIdColumn.appendChild(o);
+  });
 }
 
-document.getElementById("processBtn").addEventListener("click", () => {
-  const config = {
-    productId: productIdColumn.value,
-    url: urlColumn.value,
-    width: widthColumn.value,
-    height: heightColumn.value,
-    title: titleColumn.value
-  };
+processBtn.addEventListener("click", async () => {
+  const productIdCol = productIdColumn.value;
+  if (!productIdCol) return;
 
-  const output = processAssets(rows, config);
-  exportCSV(output);
+  statusText.textContent = "Detecting assets and resolutions...";
+  const assets = await extractAssets(rows, productIdCol);
+  exportCSV(assets);
+  statusText.textContent = "CSV generated and downloaded.";
 });
