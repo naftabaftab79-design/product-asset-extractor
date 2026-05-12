@@ -1,54 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
   <meta charset="UTF-8" />
   <title>Product Asset Extractor</title>
 
-  <!-- External Libraries -->
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-  <!-- App Styles -->
-  <link rel="stylesheet" href="css/styles.css">
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 
-
 <body>
-  <div class="container">
-    <h1>Product Asset Extractor</h1>
+  <div class="app-container">
+    <header>
+      <h1>Product Asset Extractor</h1>
+      <p>
+        Automatically detects product images, documents, image roles,
+        and resolutions. CSV output only.
+      </p>
+    </header>
 
-    <p class="subtitle">
-      Generic utility to normalize product images and documents into CSV
-    </p>
+    <section class="card">
+      <label class="file-label">
+        Upload Product Catalog (CSV or Excel)
+        <input type="file" id="fileInput" accept=".csv,.xlsx" />
+      </label>
 
-    <!-- File Upload -->
-    <input type="file" id="fileInput" accept=".csv,.xlsx" />
+      <div id="productIdSection" class="hidden">
+        <label>
+          Product Identifier Column
+          <select id="productIdColumn"></select>
+        </label>
 
-    <!-- Column Mapping -->
-    <div id="mappingSection" class="hidden">
-      <h3>Column Mapping</h3>
+        <button id="processBtn">Process & Download CSV</button>
+      </div>
+    </section>
 
-      <label>Product Identifier</label>
-      <select id="productIdColumn"></select>
-
-      <label>Asset URL</label>
-      <select id="urlColumn"></select>
-
-      <label>Width</label>
-      <select id="widthColumn"></select>
-
-      <label>Height</label>
-      <select id="heightColumn"></select>
-
-      <label>Asset Name / Title (optional)</label>
-      <select id="titleColumn"></select>
-
-      <button id="processBtn">Generate CSV</button>
-    </div>
-
-    <pre id="log"></pre>
+    <section class="status">
+      <span id="statusText"></span>
+    </section>
   </div>
 
   <!-- App Scripts -->
